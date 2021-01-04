@@ -3,6 +3,7 @@ const cors = require('cors');
 
 const app = express();
 
+// Example
 app.get('/api/customers', cors(), (req, res) => {
   const customers = [{id: 1, name: 'John'}];
 
