@@ -1,11 +1,11 @@
-const express = require('express');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
 
 const app = express();
 
 // Example
 app.get('/api/customers', cors(), (req, res) => {
-  const customers = [{id: 1, name: 'John'}];
+  const customers = [{ id: 1, name: 'John' }];
 
   res.json(customers);
 });
