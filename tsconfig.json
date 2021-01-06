@@ -17,5 +17,5 @@
     "moduleResolution": "node",
     "downlevelIteration": true
   },
-  "include": ["client"]
+  "exclude": ["node_modules", "./client/node_modules"]
 }

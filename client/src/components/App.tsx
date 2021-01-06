@@ -1,13 +1,13 @@
 import React from 'react';
 
+import { LoginForm } from 'components/LoginForm';
+
 const App: React.FC = () => {
-  let [count, setCount] = React.useState(1);
-
-  React.useEffect(() => {
-    console.log(count);
-  }, [count]);
-
-  return <div className="App">App</div>;
+  return (
+    <div className="App">
+      <LoginForm />
+    </div>
+  );
 };
 
 export default App;
