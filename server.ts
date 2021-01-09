@@ -1,13 +1,31 @@
 import express from 'express';
-import cors from 'cors';
+import bodyParser from 'body-parser';
+import jwt from 'jsonwebtoken';
+import * as dotenv from 'dotenv';
 
 const app = express();
+app.use(bodyParser.json());
 
-// Example
-app.get('/api/customers', cors(), (req, res) => {
-  const customers = [{ id: 1, name: 'John' }];
+dotenv.config();
 
-  res.json(customers);
+const secret = process.env.TOKEN_SECRET;
+
+// Routes
+app.post('/api/register', (req, res) => {
+  res.status(200).send({ msg: 'Welcome!' });
+});
+
+app.post('/api/authenticate', function (req, res) {
+  const token = jwt.sign({ email: req.body.email }, secret, { expiresIn: '1h' });
+  res.cookie('token', token, { httpOnly: true }).sendStatus(200);
+});
+
+app.get('/api/home', (req, res) => {
+  res.send('Welcome!');
+});
+
+app.get('/api/secret', (req, res) => {
+  res.send('The password is potato');
 });
 
 const port = 5000;
