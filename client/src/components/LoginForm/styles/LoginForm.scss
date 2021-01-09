@@ -1,28 +1,30 @@
 .login-form {
-  max-width: 40rem;
-  margin: 10rem auto;
-  display: flex;
-  flex-direction: column;
+  form {
+    max-width: 40rem;
+    margin: 10rem auto;
+    display: flex;
+    flex-direction: column;
 
-  h3 {
-    text-align: center;
-  }
-
-  .field {
-    margin-top: 1rem;
-
-    label {
-      display: inline-block;
-      width: 15rem;
+    h3 {
+      text-align: center;
     }
 
-    input {
-      width: 25rem;
-      box-sizing: border-box;
-    }
-  }
+    .field {
+      margin-top: 1rem;
 
-  .submit-btn {
-    margin-top: 1rem;
+      label {
+        display: inline-block;
+        width: 15rem;
+      }
+
+      input {
+        width: 25rem;
+        box-sizing: border-box;
+      }
+    }
+
+    .submit-btn {
+      margin-top: 1rem;
+    }
   }
 }
