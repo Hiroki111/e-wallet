@@ -1,10 +1,14 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+
+import withAuth from './middleware';
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 dotenv.config();
 
@@ -15,17 +19,17 @@ app.post('/api/register', (req, res) => {
   res.status(200).send({ msg: 'Welcome!' });
 });
 
-app.post('/api/authenticate', function (req, res) {
+app.post('/api/authenticate', (req, res) => {
   const token = jwt.sign({ email: req.body.email }, secret, { expiresIn: '1h' });
   res.cookie('token', token, { httpOnly: true }).sendStatus(200);
 });
 
-app.get('/api/home', (req, res) => {
-  res.send('Welcome!');
+app.get('/api/secret', withAuth, (req, res) => {
+  res.send('The password is potato');
 });
 
-app.get('/api/secret', (req, res) => {
-  res.send('The password is potato');
+app.get('/api/home', (req, res) => {
+  res.send('Welcome!');
 });
 
 const port = 5000;
