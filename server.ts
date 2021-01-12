@@ -24,6 +24,10 @@ app.post('/api/authenticate', (req, res) => {
   res.cookie('token', token, { httpOnly: true }).sendStatus(200);
 });
 
+app.get('/checkToken', withAuth, (req, res) => {
+  res.sendStatus(200);
+});
+
 app.get('/api/secret', withAuth, (req, res) => {
   res.send('The password is potato');
 });
