@@ -1,0 +1,22 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+
+  background-color: black;
+  color: white;
+
+  height: 2rem;
+
+  div {
+    margin: 0 1rem;
+
+    span {
+      display: inline-block;
+      line-height: 2rem;
+    }
+
+    .logout {
+      cursor: pointer;
+    }
+  }
+}

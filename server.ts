@@ -28,8 +28,8 @@ app.get('/checkToken', withAuth, (req, res) => {
   res.sendStatus(200);
 });
 
-app.get('/api/secret', withAuth, (req, res) => {
-  res.send('The password is potato');
+app.post('/api/logout', withAuth, (req, res) => {
+  res.clearCookie('token').sendStatus(200);
 });
 
 app.get('/api/home', (req, res) => {
