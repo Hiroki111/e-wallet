@@ -1,27 +1,21 @@
 import { useHistory } from 'react-router-dom';
 
+import restApi from 'network/restApi';
 import './styles/Header.scss';
 
 export const Header = () => {
   let history = useHistory();
 
-  const handleClickLogout = () => {
-    fetch('/api/logout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          history.push('/login');
-        } else {
-          const error = new Error('login failed');
-          throw error;
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        alert('Error logging out please try again');
-      });
+  const handleClickLogout = async () => {
+    try {
+      const res = await restApi.logout();
+      if (res.status !== 200) {
+        throw new Error('logout failed');
+      }
+      history.push('/login');
+    } catch (error) {
+      alert('Error logging out. Please try again later.');
+    }
   };
 
   return (

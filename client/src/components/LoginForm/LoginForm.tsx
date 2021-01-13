@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import restApi from 'network/restApi';
 import './styles/LoginForm.scss';
 
 export const LoginForm = () => {
@@ -10,26 +11,17 @@ export const LoginForm = () => {
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('submitted', email, password);
-    fetch('/api/authenticate', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          history.push('/');
-        } else {
-          const error = new Error('login failed');
-          throw error;
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        alert('Error logging in please try again');
-      });
+    try {
+      const res = await restApi.authenticate(email, password);
+      if (res.status !== 200) {
+        throw new Error('login failed');
+      }
+      history.push('/');
+    } catch (error) {
+      alert('Error logging in please try again');
+    }
   };
 
   return (
