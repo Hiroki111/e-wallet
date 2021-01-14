@@ -24,7 +24,7 @@ app.post('/api/authenticate', (req, res) => {
   res.cookie('token', token, { httpOnly: true }).sendStatus(200);
 });
 
-app.get('/checkToken', withAuth, (req, res) => {
+app.get('/api/checkToken', withAuth, (req, res) => {
   res.sendStatus(200);
 });
 

@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Redirect } from 'react-router-dom';
 
+import restApi from 'network/restApi';
+
 // This HOC is made as an experimentation.
 // It may be better to use a class component (instead of a functional one), because
 // 1) TS class component returns React.ReactNode (with render), which can be both statefull and stateless components
@@ -14,7 +16,7 @@ export const withAuth = (Component: () => JSX.Element) => ({ ...props }) => {
 
   const checkToken = useCallback(async () => {
     try {
-      const res = await fetch('/checkToken');
+      const res = await restApi.checkLoginStatus();
       if (res.status === 200) {
         setLoading(false);
       } else {
@@ -22,8 +24,8 @@ export const withAuth = (Component: () => JSX.Element) => ({ ...props }) => {
       }
     } catch (err) {
       console.error(err);
-      setLoading(false);
       setRedirect(true);
+      setLoading(false);
     }
   }, []);
 

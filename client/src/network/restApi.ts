@@ -22,6 +22,13 @@ const restApi = {
       headers: defaultHeaders,
     });
   },
+
+  checkLoginStatus: async () => {
+    return await axios({
+      method: 'GET',
+      url: '/api/checkToken',
+    });
+  },
 };
 
 export default restApi;
