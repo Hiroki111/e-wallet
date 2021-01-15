@@ -9,7 +9,7 @@ const restApi = {
   authenticate: async (email: string, password: string) => {
     return await axios({
       method: 'POST',
-      url: '/api/authenticate',
+      url: '/authenticate',
       data: { email, password },
       headers: defaultHeaders,
     });
@@ -18,7 +18,7 @@ const restApi = {
   logout: async () => {
     return await axios({
       method: 'POST',
-      url: '/api/logout',
+      url: '/logout',
       headers: defaultHeaders,
     });
   },
@@ -26,7 +26,7 @@ const restApi = {
   checkLoginStatus: async () => {
     return await axios({
       method: 'GET',
-      url: '/api/checkToken',
+      url: '/checkToken',
     });
   },
 };
