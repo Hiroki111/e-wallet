@@ -3,7 +3,7 @@
     "sourceMap": true,
     "noImplicitAny": false,
     "module": "commonjs",
-    "target": "es6",
+    "target": "es2017",
     "outDir": "./build",
     "lib": ["ESNext", "dom", "dom.iterable"],
     "removeComments": true,
