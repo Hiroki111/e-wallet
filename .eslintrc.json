@@ -27,7 +27,9 @@
     "import/namespace": 2,
     "import/default": 2,
     "import/export": 2,
-    "import/extensions": "off"
+    "import/extensions": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-explicit-any": "off"
   },
   "settings": {
     "import/resolver": {
