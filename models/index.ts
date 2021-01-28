@@ -1,17 +1,18 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
-import { dbConfig } from '../config/db.config';
-import { User } from './user.model';
-import { Role } from './role.model';
+import { dbConfig } from 'config/db';
+import { User } from 'models/user.model';
+import { Role } from 'models/role.model';
 
 dotenv.config();
 
-const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
-  host: dbConfig.HOST,
+const sequelize = new Sequelize(dbConfig.DB_NAME, dbConfig.DB_USER, dbConfig.DB_PASSWORD, {
+  host: dbConfig.DB_HOST,
   dialect: dbConfig.dialect,
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const db: any = {};
 
 db.sequelize = sequelize;
