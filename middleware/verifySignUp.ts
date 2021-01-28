@@ -5,26 +5,29 @@ import { db } from '../models';
 const ROLES = db.ROLES;
 const User = db.user;
 
-const checkDuplicateUsernameOrEmail = (req: Request, res: Response, next: NextFunction): void => {
-  User.findOne({ where: { username: req.body.username } }).then((user) => {
+const checkDuplicateUsernameOrEmail = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    let user = await User.findOne({ where: { username: req.body.username } });
     if (user) {
-      res.status(400).send({ message: 'Failed! Username is already in use!' });
-      return;
+      throw Error('Failed! Username is already in use!');
     }
 
-    User.findOne({ where: { email: req.body.email } }).then((user) => {
-      if (user) {
-        res.status(400).send({ message: 'Failed! Email is already in use!' });
-        return;
-      }
+    user = await User.findOne({ where: { email: req.body.email } });
+    if (user) {
+      throw Error('Failed! Email is already in use!');
+    }
 
-      next();
-    });
-  });
+    next();
+  } catch (error) {
+    res.status(400).send({ message: error.toString() });
+  }
 };
 
 const checkRolesExisted = (req: Request, res: Response, next: NextFunction): void => {
-  if (!req.body.roles || req.body.roles.length < 1) return;
+  if (!req.body.roles || req.body.roles.length < 1) {
+    next();
+    return;
+  }
 
   for (let i = 0; i < req.body.roles.length; i++) {
     if (ROLES.includes(req.body.roles[i])) continue;
