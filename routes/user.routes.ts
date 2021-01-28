@@ -1,4 +1,4 @@
-import { authJwt } from '../middleware/authJwt';
+import * as authJwt from '../middleware/authJwt';
 import * as controller from '../controllers/user.controller';
 
 module.exports = function (app) {
@@ -14,4 +14,6 @@ module.exports = function (app) {
   app.get('/api/test/mod', [authJwt.verifyToken, authJwt.isModerator], controller.moderatorBoard);
 
   app.get('/api/test/admin', [authJwt.verifyToken, authJwt.isAdmin], controller.adminBoard);
+
+  app.get('/api/test/modOrAdmin', [authJwt.verifyToken, authJwt.isModeratorOrAdmin], controller.adminBoard);
 };
