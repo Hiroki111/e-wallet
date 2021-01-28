@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { Op } from 'sequelize';
@@ -7,7 +8,7 @@ import { db } from '../models';
 const User = db.user;
 const Role = db.role;
 
-export const signup = (req, res) => {
+export const signup = (req: Request, res: Response): void => {
   // Save User to Database
   User.create({
     username: req.body.username,
@@ -35,7 +36,7 @@ export const signup = (req, res) => {
     });
 };
 
-export const signin = (req, res) => {
+export const signin = (req: Request, res: Response): void => {
   User.findOne({
     where: {
       username: req.body.username,
