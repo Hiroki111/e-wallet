@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 
 import { User } from 'models/user';
-import { Role } from 'models/role.model';
+import { Role } from 'models/role';
 import { sequelizeInstance } from 'models/instances/sequelize';
 
 dotenv.config();
@@ -11,7 +11,7 @@ const db: any = {};
 db.sequelize = sequelizeInstance;
 
 db.user = User;
-db.role = Role(sequelizeInstance);
+db.role = Role;
 
 db.role.belongsToMany(db.user, {
   through: 'user_roles',
