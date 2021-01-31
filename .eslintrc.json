@@ -17,7 +17,8 @@
       "jsx": true
     },
     "ecmaVersion": 12,
-    "sourceType": "module"
+    "sourceType": "module",
+    "project": "./tsconfig.json"
   },
   "plugins": ["react", "@typescript-eslint", "import"],
   "rules": {
@@ -29,6 +30,7 @@
     "import/export": 2,
     "import/extensions": "off",
     "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-floating-promises": "error",
     "@typescript-eslint/no-explicit-any": "off"
   },
   "settings": {
