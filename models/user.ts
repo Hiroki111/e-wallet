@@ -2,12 +2,12 @@ import {
   Model,
   DataTypes,
   Optional,
-  BelongsToManyAddAssociationMixin,
+  BelongsToManySetAssociationsMixin,
   BelongsToManyGetAssociationsMixin,
 } from 'sequelize';
 
 import { sequelizeInstance } from 'models/instances/sequelize';
-import { Role } from 'models/role';
+import { Role, RoleInstance } from 'models/role';
 
 // interfaces
 export interface UserAttributes {
@@ -20,8 +20,8 @@ export interface UserAttributes {
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
 export interface UserInstance extends Model<UserAttributes, UserCreationAttributes>, UserAttributes {
-  getRoles: BelongsToManyGetAssociationsMixin<typeof Role>;
-  setRoles: BelongsToManyAddAssociationMixin<typeof Role, number[]>;
+  getRoles: BelongsToManyGetAssociationsMixin<RoleInstance>;
+  setRoles: BelongsToManySetAssociationsMixin<RoleInstance, number>;
 }
 
 // definition

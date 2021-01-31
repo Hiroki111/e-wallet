@@ -1,11 +1,8 @@
 import { Request, Response } from 'express';
-import { Op } from 'sequelize';
 
-import { db } from 'models';
 import { UserService } from 'services/user.service';
 import { AuthService } from 'services/auth.service';
-
-const Role = db.role;
+import { RoleService } from 'services/role.service';
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -14,14 +11,15 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       email: req.body.email,
       password: req.body.password,
     });
+
     if (!req.body.roles || req.body.roles.length < 1) {
       await UserService.setRoles(user, [1]);
       res.send({ message: 'User was registered successfully!' });
       return;
     }
-    const roles = await Role.findAll({
-      where: { name: { [Op.or]: req.body.roles } },
-    });
+
+    const roles = await RoleService.findAllByNames(req.body.roles);
+
     await UserService.setRoles(user, roles);
     res.send({ message: 'User was registered successfully!' });
   } catch (error) {

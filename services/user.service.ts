@@ -1,4 +1,3 @@
-import { ModelCtor } from 'sequelize';
 import bcrypt from 'bcryptjs';
 
 import { User, UserInstance, UserCreationAttributes } from 'models/user';
@@ -28,7 +27,7 @@ export class UserService {
     }
   }
 
-  static async setRoles(user: UserInstance, roles: number[] | ModelCtor<RoleInstance>): Promise<void> {
+  static async setRoles(user: UserInstance, roles: (RoleInstance | number)[]): Promise<void> {
     await user.setRoles(roles);
   }
 
