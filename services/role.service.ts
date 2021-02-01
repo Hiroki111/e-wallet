@@ -8,4 +8,8 @@ export class RoleService {
       where: { name: { [Op.or]: roleNames } },
     });
   }
+
+  static async getAllRoleNames(): Promise<string[]> {
+    return (await Role.findAll()).map((role) => role.name);
+  }
 }

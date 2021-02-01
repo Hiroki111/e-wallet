@@ -1,4 +1,4 @@
-import { verifySignUp } from '../middleware/verifySignUp';
+import * as verifySignUp from '../middleware/verifySignUp';
 import * as controller from '../controllers/auth.controller';
 
 module.exports = function (app) {

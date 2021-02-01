@@ -14,6 +14,10 @@ export class UserService {
     return await User.findOne({ where: { username } });
   }
 
+  static async findByEmail(email: string): Promise<UserInstance> {
+    return await User.findOne({ where: { email } });
+  }
+
   static async register({ username, email, password }: UserCreationAttributes): Promise<UserInstance> {
     try {
       const user = await User.create({

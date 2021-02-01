@@ -1,20 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { db } from '../models';
+import { RoleService } from 'services/role.service';
+import { UserService } from 'services/user.service';
 
-const ROLES = db.ROLES;
-const User = db.user;
-
-const checkDuplicateUsernameOrEmail = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const checkDuplicateUsernameOrEmail = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    let user = await User.findOne({ where: { username: req.body.username } });
+    let user = await UserService.findByUserName(req.body.username);
     if (user) {
-      throw Error('Failed! Username is already in use!');
+      throw Error('Username is already in use!');
     }
 
-    user = await User.findOne({ where: { email: req.body.email } });
+    user = await UserService.findByEmail(req.body.email);
     if (user) {
-      throw Error('Failed! Email is already in use!');
+      throw Error('Email is already in use!');
     }
 
     next();
@@ -23,20 +21,19 @@ const checkDuplicateUsernameOrEmail = async (req: Request, res: Response, next: 
   }
 };
 
-const checkRolesExisted = (req: Request, res: Response, next: NextFunction): void => {
+export const checkRolesExisted = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   if (!req.body.roles || req.body.roles.length < 1) {
     next();
     return;
   }
 
+  const allRoleNames = await RoleService.getAllRoleNames();
   for (let i = 0; i < req.body.roles.length; i++) {
-    if (ROLES.includes(req.body.roles[i])) continue;
+    if (allRoleNames.includes(req.body.roles[i])) continue;
 
-    res.status(400).send({ message: 'Failed! Role does not exist = ' + req.body.roles[i] });
+    res.status(400).send({ message: 'Role does not exist = ' + req.body.roles[i] });
     return;
   }
 
   next();
 };
-
-export const verifySignUp = { checkDuplicateUsernameOrEmail, checkRolesExisted };
