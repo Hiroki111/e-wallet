@@ -8,4 +8,15 @@ export class AuthService {
       expiresIn: TOKEN_VALID_PERIOD,
     });
   }
+
+  static verifyToken = (token: string | string[]): Promise<number> => {
+    return new Promise((resolve, reject) => {
+      jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
+        if (err) {
+          reject();
+        }
+        resolve(decoded.id);
+      });
+    });
+  };
 }

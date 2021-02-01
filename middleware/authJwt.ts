@@ -1,15 +1,16 @@
-import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
-import { db } from 'models';
+import { UserService } from 'services/user.service';
+import { AuthService } from 'services/auth.service';
 
-interface IAuthJwtRequest extends Request {
-  userId: string;
+interface AuthJwtRequest extends Request {
+  userId: number;
 }
 
-const User = db.user;
+const ADMIN_ROLE = 'admin';
+const MODERATOR_ROLE = 'moderator';
 
-export const verifyToken = (req: IAuthJwtRequest, res: Response, next: NextFunction): void => {
+export const verifyToken = async (req: AuthJwtRequest, res: Response, next: NextFunction): Promise<void> => {
   const token = req.headers['x-access-token'];
 
   if (!token) {
@@ -17,21 +18,27 @@ export const verifyToken = (req: IAuthJwtRequest, res: Response, next: NextFunct
     return;
   }
 
-  jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
-    if (err) {
-      res.status(401).send({ message: 'Unauthorized!' });
-      return;
-    }
-    req.userId = decoded.id;
+  try {
+    req.userId = await AuthService.verifyToken(token);
     next();
-  });
+  } catch (error) {
+    res.status(401).send({ message: 'Unauthorized!' });
+  }
 };
 
-export const isAdmin = async (req: IAuthJwtRequest, res: Response, next: NextFunction): Promise<void> => {
+const findUserById = async (userId: number) => {
+  const user = await UserService.findById(userId);
+  if (!user) {
+    throw Error('No user found!');
+  }
+  return user;
+};
+
+export const isAdmin = async (req: AuthJwtRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const user = await User.findByPk(req.userId);
+    const user = await findUserById(Number(req.userId));
     const roles = await user.getRoles();
-    const hasAdminRole = roles.some((role) => role.name === 'admin');
+    const hasAdminRole = roles.some((role) => role.name === ADMIN_ROLE);
     if (!hasAdminRole) {
       throw Error('Require Admin Role!');
     }
@@ -41,11 +48,11 @@ export const isAdmin = async (req: IAuthJwtRequest, res: Response, next: NextFun
   }
 };
 
-export const isModerator = async (req: IAuthJwtRequest, res: Response, next: NextFunction): Promise<void> => {
+export const isModerator = async (req: AuthJwtRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const user = await User.findByPk(req.userId);
+    const user = await findUserById(Number(req.userId));
     const roles = await user.getRoles();
-    const hasModeratorRole = roles.some((role) => role.name === 'moderator');
+    const hasModeratorRole = roles.some((role) => role.name === MODERATOR_ROLE);
     if (!hasModeratorRole) {
       throw Error('Require Moderator Role!');
     }
@@ -55,11 +62,11 @@ export const isModerator = async (req: IAuthJwtRequest, res: Response, next: Nex
   }
 };
 
-export const isModeratorOrAdmin = async (req: IAuthJwtRequest, res: Response, next: NextFunction): Promise<void> => {
+export const isModeratorOrAdmin = async (req: AuthJwtRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const user = await User.findByPk(req.userId);
+    const user = await findUserById(Number(req.userId));
     const roles = await user.getRoles();
-    const hasModeratorOrAdminRole = roles.some((role) => role.name === 'moderator' || role.name === 'admin');
+    const hasModeratorOrAdminRole = roles.some((role) => [MODERATOR_ROLE, ADMIN_ROLE].includes(role.name));
     if (!hasModeratorOrAdminRole) {
       throw Error('Require Moderator or Admin Role!');
     }
