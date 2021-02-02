@@ -5,25 +5,11 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
-import { db } from './models';
 import withAuth from './middleware';
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser());
-
-// const Role = db.role;
-
-// const initial = () => {
-//   Role.create({ id: 1, name: 'user' });
-//   Role.create({ id: 2, name: 'moderator' });
-//   Role.create({ id: 3, name: 'admin' });
-// };
-
-// db.sequelize.sync({ force: true }).then(() => {
-//   console.log('Drop and Resync Db');
-//   initial();
-// });
 
 dotenv.config();
 
