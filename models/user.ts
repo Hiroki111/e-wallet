@@ -7,7 +7,7 @@ import {
 } from 'sequelize';
 
 import { sequelizeInstance } from 'models/instances/sequelize';
-import { Role, RoleInstance } from 'models/role';
+import { RoleInstance } from 'models/role';
 
 // interfaces
 export interface UserAttributes {
@@ -25,7 +25,7 @@ export interface UserInstance extends Model<UserAttributes, UserCreationAttribut
 }
 
 // definition
-const User = sequelizeInstance.define<UserInstance>(
+export const User = sequelizeInstance.define<UserInstance>(
   'users',
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -42,12 +42,3 @@ const User = sequelizeInstance.define<UserInstance>(
     },
   }
 );
-
-// association
-User.belongsToMany(Role, {
-  through: 'user_roles',
-  foreignKey: 'userId',
-  otherKey: 'roleId',
-});
-
-export { User };
