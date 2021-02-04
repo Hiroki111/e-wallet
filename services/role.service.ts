@@ -1,9 +1,10 @@
 import { Op } from 'sequelize';
 
 import db from 'models';
+import { RoleInstance } from 'models/role';
 
 export class RoleService {
-  static async findAllByNames(roleNames: string[]): Promise<typeof db.Role[]> {
+  static async findAllByNames(roleNames: string[]): Promise<RoleInstance[]> {
     return await db.Role.findAll({
       where: { name: { [Op.or]: roleNames } },
     });
