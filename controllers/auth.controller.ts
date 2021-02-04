@@ -27,9 +27,9 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const signin = async (req: Request, res: Response): Promise<void> => {
+export const login = async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = await UserService.findByUserName(req.body.username);
+    const user = await UserService.findByEmail(req.body.email);
 
     if (!user) {
       res.status(404).send({ message: 'User Not found.' });
@@ -46,16 +46,19 @@ export const signin = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const roles = await UserService.getRoles(user);
-
-    res.status(200).send({
-      id: user.id,
+    res.status(200).cookie('token', AuthService.generateJwtToken(user.id), { httpOnly: true }).send({
       username: user.username,
       email: user.email,
-      roles,
-      accessToken: AuthService.generateJwtToken(user.id),
     });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
+};
+
+export const checkToken = (req: Request, res: Response): void => {
+  res.sendStatus(200);
+};
+
+export const logout = (req: Request, res: Response): void => {
+  res.clearCookie('token').sendStatus(200);
 };

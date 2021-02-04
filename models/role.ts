@@ -10,7 +10,7 @@ export interface RoleCreationAttributes extends Optional<RoleAttributes, 'id'> {
 
 export interface RoleInstance extends Model<RoleAttributes, RoleCreationAttributes>, RoleAttributes {}
 
-export const Role = sequelizeInstance.define<RoleInstance>(
+const Role = sequelizeInstance.define<RoleInstance>(
   'roles',
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -20,3 +20,13 @@ export const Role = sequelizeInstance.define<RoleInstance>(
     paranoid: true,
   }
 );
+
+Role.associate = (models) => {
+  Role.belongsToMany(models.User, {
+    through: 'user_roles',
+    foreignKey: 'userId',
+    otherKey: 'roleId',
+  });
+};
+
+export { Role };

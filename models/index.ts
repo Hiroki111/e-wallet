@@ -1,16 +1,15 @@
-import { User } from './user';
 import { Role } from './role';
+import { User } from './user';
 
-User.belongsToMany(Role, {
-  through: 'user_roles',
-  foreignKey: 'userId',
-  otherKey: 'roleId',
+const db: { [key: string]: any } = {};
+
+db.Role = Role;
+db.User = User;
+
+Object.keys(db).forEach((modelName) => {
+  if ('associate' in db[modelName]) {
+    db[modelName].associate(db);
+  }
 });
 
-Role.belongsToMany(User, {
-  through: 'user_roles',
-  foreignKey: 'roleId',
-  otherKey: 'userId',
-});
-
-export { User, Role };
+export default db;

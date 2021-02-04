@@ -25,7 +25,7 @@ export interface UserInstance extends Model<UserAttributes, UserCreationAttribut
 }
 
 // definition
-export const User = sequelizeInstance.define<UserInstance>(
+const User = sequelizeInstance.define<UserInstance>(
   'users',
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -42,3 +42,15 @@ export const User = sequelizeInstance.define<UserInstance>(
     },
   }
 );
+
+User.associate = (models) => {
+  User.belongsToMany(models.Role, {
+    through: 'user_roles',
+    foreignKey: 'userId',
+    otherKey: 'roleId',
+  });
+
+  console.log('User associate', models);
+};
+
+export { User };
