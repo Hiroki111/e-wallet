@@ -1,6 +1,6 @@
+import * as authJwt from 'middleware/authJwt';
 import * as verifySignUp from 'middleware/verifySignUp';
 import * as controller from 'controllers/auth.controller';
-import withAuth from 'middleware';
 
 module.exports = function (app) {
   app.use((req, res, next) => {
@@ -16,7 +16,7 @@ module.exports = function (app) {
 
   app.post('/api/auth/login', controller.login);
 
-  app.post('/api/auth/logout', [withAuth], controller.logout);
+  app.post('/api/auth/logout', [authJwt.verifyToken], controller.logout);
 
-  app.get('/api/auth/checkToken', [withAuth], controller.checkToken);
+  app.get('/api/auth/checkToken', [authJwt.verifyToken], controller.checkToken);
 };

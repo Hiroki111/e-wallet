@@ -10,19 +10,22 @@ interface AuthJwtRequest extends Request {
 const ADMIN_ROLE = 'admin';
 const MODERATOR_ROLE = 'moderator';
 
-export const verifyToken = async (req: AuthJwtRequest, res: Response, next: NextFunction): Promise<void> => {
-  const token = req.headers['x-access-token'];
+interface AuthenticationRequest extends Request {
+  cookies: { token: string };
+}
 
+export const verifyToken = async (req: AuthenticationRequest, res: Response, next: NextFunction): Promise<void> => {
+  const token = req.cookies.token;
   if (!token) {
-    res.status(403).send({ message: 'No token provided!' });
+    res.status(403).send({ message: 'No token provided' });
     return;
   }
 
   try {
-    req.userId = await AuthService.verifyToken(token);
+    await AuthService.verifyToken(token);
     next();
   } catch (error) {
-    res.status(401).send({ message: 'Unauthorized!' });
+    res.status(401).send({ message: 'Unauthorized' });
   }
 };
 
