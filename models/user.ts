@@ -49,8 +49,6 @@ User.associate = (models) => {
     foreignKey: 'userId',
     otherKey: 'roleId',
   });
-
-  console.log('User associate', models);
 };
 
 export { User };
