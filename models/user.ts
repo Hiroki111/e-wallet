@@ -1,5 +1,6 @@
 import {
   Model,
+  BuildOptions,
   DataTypes,
   Optional,
   BelongsToManySetAssociationsMixin,
@@ -8,8 +9,8 @@ import {
 
 import { sequelizeInstance } from 'models/instances/sequelize';
 import { RoleInstance } from 'models/role';
+import { WithAssociate } from 'models/interfaces';
 
-// interfaces
 export interface UserAttributes {
   id: number;
   username: string;
@@ -24,7 +25,11 @@ export interface UserInstance extends Model<UserAttributes, UserCreationAttribut
   setRoles: BelongsToManySetAssociationsMixin<RoleInstance, number>;
 }
 
-// definition
+type UserWithAssociation = typeof Model &
+  WithAssociate & {
+    new (values?: Record<string, unknown>, options?: BuildOptions): UserInstance;
+  };
+
 const User = sequelizeInstance.define<UserInstance>(
   'users',
   {
@@ -41,7 +46,7 @@ const User = sequelizeInstance.define<UserInstance>(
       },
     },
   }
-);
+) as UserWithAssociation;
 
 User.associate = (models) => {
   User.belongsToMany(models.Role, {
