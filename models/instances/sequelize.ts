@@ -1,11 +1,11 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
-import { dbConfig } from 'config/db';
+import config from 'config/config.js';
 
 dotenv.config();
 
-export const sequelizeInstance = new Sequelize(dbConfig.DB_NAME, dbConfig.DB_USER, dbConfig.DB_PASSWORD, {
-  host: dbConfig.DB_HOST,
-  dialect: dbConfig.dialect,
-});
+const env = process.env.NODE_ENV || 'development';
+const sequelizeInstance = new Sequelize(config[env].database, config[env].username, config[env].password, config[env]);
+
+export { sequelizeInstance };

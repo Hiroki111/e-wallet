@@ -6,7 +6,7 @@
       "module-resolver",
       {
         "root": ["./"],
-        "extensions": [".ts"]
+        "extensions": [".ts", ".js"]
       }
     ]
   ]
