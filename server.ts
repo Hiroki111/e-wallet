@@ -4,8 +4,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
-import { ApiAuthRouter } from 'routes/auth.routes';
-import { ApiUserRouter } from 'routes/user.routes';
+import { RootRouter } from 'routes';
 
 const app = express();
 app.use(bodyParser.json());
@@ -20,8 +19,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/auth', ApiAuthRouter);
-app.use('/api/user', ApiUserRouter);
+app.use('/', RootRouter);
 
 const port = 5000;
 
