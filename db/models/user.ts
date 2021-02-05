@@ -7,9 +7,9 @@ import {
   BelongsToManyGetAssociationsMixin,
 } from 'sequelize';
 
-import { sequelizeInstance } from 'models/instances/sequelize';
-import { RoleInstance } from 'models/role';
-import { WithAssociate } from 'models/interfaces';
+import { sequelizeInstance } from 'db/models/instances/sequelize';
+import { RoleInstance } from 'db/models/role';
+import { WithAssociate } from 'db/models/interfaces';
 
 export interface UserAttributes {
   id: number;

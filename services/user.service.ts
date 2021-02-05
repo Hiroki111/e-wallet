@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
 
-import db from 'models';
-import { UserInstance, UserCreationAttributes } from 'models/user';
-import { RoleInstance } from 'models/role';
+import db from 'db/models';
+import { UserInstance, UserCreationAttributes } from 'db/models/user';
+import { RoleInstance } from 'db/models/role';
 
 export class UserService {
   private static readonly _saltRounds = 12;

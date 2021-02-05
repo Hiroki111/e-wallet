@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 
-import db from 'models';
-import { RoleInstance } from 'models/role';
+import db from 'db/models';
+import { RoleInstance } from 'db/models/role';
 
 export class RoleService {
   static async findAllByNames(roleNames: string[]): Promise<RoleInstance[]> {
