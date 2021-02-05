@@ -12,6 +12,7 @@ const MODERATOR_ROLE = 'moderator';
 
 interface AuthenticationRequest extends Request {
   cookies: { token: string };
+  userId: number;
 }
 
 export const verifyToken = async (req: AuthenticationRequest, res: Response, next: NextFunction): Promise<void> => {
@@ -22,7 +23,7 @@ export const verifyToken = async (req: AuthenticationRequest, res: Response, nex
   }
 
   try {
-    await AuthService.verifyToken(token);
+    req.userId = await AuthService.verifyToken(token);
     next();
   } catch (error) {
     res.status(401).send({ message: 'Unauthorized' });

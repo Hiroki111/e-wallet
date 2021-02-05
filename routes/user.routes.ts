@@ -1,19 +1,18 @@
+import express from 'express';
+
 import * as authJwt from '../middleware/authJwt';
 import * as controller from '../controllers/user.controller';
 
-module.exports = function (app) {
-  app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Headers', 'x-access-token, Origin, Content-Type, Accept');
-    next();
-  });
+const ApiUserRouter = express.Router();
 
-  app.get('/api/test/all', controller.allAccess);
+ApiUserRouter.get('/all', controller.allAccess);
 
-  app.get('/api/test/user', [authJwt.verifyToken], controller.userBoard);
+ApiUserRouter.get('/user', [authJwt.verifyToken], controller.userBoard);
 
-  app.get('/api/test/mod', [authJwt.verifyToken, authJwt.isModerator], controller.moderatorBoard);
+ApiUserRouter.get('/mod', [authJwt.verifyToken, authJwt.isModerator], controller.moderatorBoard);
 
-  app.get('/api/test/admin', [authJwt.verifyToken, authJwt.isAdmin], controller.adminBoard);
+ApiUserRouter.get('/admin', [authJwt.verifyToken, authJwt.isAdmin], controller.adminBoard);
 
-  app.get('/api/test/modOrAdmin', [authJwt.verifyToken, authJwt.isModeratorOrAdmin], controller.adminBoard);
-};
+ApiUserRouter.get('/modOrAdmin', [authJwt.verifyToken, authJwt.isModeratorOrAdmin], controller.adminBoard);
+
+export { ApiUserRouter };
