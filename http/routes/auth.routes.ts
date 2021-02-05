@@ -1,8 +1,8 @@
 import express from 'express';
 
-import * as authJwt from 'middleware/authJwt';
-import * as verifyRegister from 'middleware/verifyRegister';
-import * as controller from 'controllers/auth.controller';
+import * as authJwt from 'http/middleware/authJwt';
+import * as verifyRegister from 'http/middleware/verifyRegister';
+import * as controller from 'http/controllers/auth.controller';
 
 const ApiAuthRouter = express.Router();
 

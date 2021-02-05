@@ -1,7 +1,7 @@
 import express from 'express';
 
-import { ApiAuthRouter } from 'routes/auth.routes';
-import { ApiUserRouter } from 'routes/user.routes';
+import { ApiAuthRouter } from 'http/routes/auth.routes';
+import { ApiUserRouter } from 'http/routes/user.routes';
 
 const RootRouter = express.Router();
 

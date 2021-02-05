@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
-import { RootRouter } from 'routes';
+import { RootRouter } from 'http/routes';
 
 dotenv.config();
 
