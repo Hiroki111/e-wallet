@@ -39,10 +39,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const isPasswordValid = UserService.validatePassword(req.body.password, user.password);
 
     if (!isPasswordValid) {
-      res.status(401).send({
-        accessToken: null,
-        message: 'Invalid Password!',
-      });
+      res.status(401).send({ message: 'Invalid Password!' });
       return;
     }
 
