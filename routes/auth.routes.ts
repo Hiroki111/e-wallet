@@ -1,5 +1,5 @@
 import * as authJwt from 'middleware/authJwt';
-import * as verifySignUp from 'middleware/verifySignUp';
+import * as verifyRegister from 'middleware/verifyRegister';
 import * as controller from 'controllers/auth.controller';
 
 module.exports = function (app) {
@@ -9,9 +9,9 @@ module.exports = function (app) {
   });
 
   app.post(
-    '/api/auth/signup',
-    [verifySignUp.checkDuplicateUsernameOrEmail, verifySignUp.checkRolesExisted],
-    controller.signup
+    '/api/auth/register',
+    [verifyRegister.checkDuplicateUsernameOrEmail, verifyRegister.checkRolesExisted],
+    controller.register
   );
 
   app.post('/api/auth/login', controller.login);

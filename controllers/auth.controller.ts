@@ -4,7 +4,7 @@ import { UserService } from 'services/user.service';
 import { AuthService } from 'services/auth.service';
 import { RoleService } from 'services/role.service';
 
-export const signup = async (req: Request, res: Response): Promise<void> => {
+export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await UserService.register({
       username: req.body.username,

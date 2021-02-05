@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 
 import db from 'models';
-import { UserInstance } from 'models/user';
+import { UserInstance, UserCreationAttributes } from 'models/user';
 import { RoleInstance } from 'models/role';
 
 export class UserService {
@@ -19,7 +19,7 @@ export class UserService {
     return await db.User.findOne({ where: { email } });
   }
 
-  static async register({ username, email, password }: UserInstance): Promise<UserInstance> {
+  static async register({ username, email, password }: UserCreationAttributes): Promise<UserInstance> {
     try {
       const user = await db.User.create({
         username,
