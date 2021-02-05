@@ -7,7 +7,7 @@ import {
   BelongsToManyGetAssociationsMixin,
 } from 'sequelize';
 
-import { sequelizeInstance } from 'db/models/instances/sequelize';
+import { sequelizeInstance } from 'db/models/sequelize';
 import { RoleInstance } from 'db/models/role';
 import { WithAssociate } from 'db/models/interfaces';
 

@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 
-import db from 'db/models';
+import db from 'db';
 import { RoleInstance } from 'db/models/role';
 
 export class RoleService {

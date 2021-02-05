@@ -1,5 +1,5 @@
-import { Role } from './role';
-import { User } from './user';
+import { Role } from './models/role';
+import { User } from './models/user';
 
 const db = { Role, User };
 

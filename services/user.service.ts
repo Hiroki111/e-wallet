@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 
-import db from 'db/models';
+import db from 'db';
 import { UserInstance, UserCreationAttributes } from 'db/models/user';
 import { RoleInstance } from 'db/models/role';
 
