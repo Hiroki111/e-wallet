@@ -1,6 +1,6 @@
 import { Model, BuildOptions, DataTypes, Optional } from 'sequelize';
 
-import { sequelize } from 'db/models/sequelize';
+import { sequelize } from 'db/sequelize';
 import { WithAssociate } from 'db/models/interfaces';
 
 export interface RoleAttributes {

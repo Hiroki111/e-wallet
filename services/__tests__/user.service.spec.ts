@@ -1,4 +1,4 @@
-import { sequelize } from 'db/models/sequelize';
+import { sequelize } from 'db/sequelize';
 import { UserService } from 'services/user.service';
 import db from 'db';
 
