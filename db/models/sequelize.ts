@@ -4,7 +4,7 @@ import config from 'config/config.js';
 
 const env = process.env.NODE_ENV || 'development';
 
-let sequelize;
+let sequelize: Sequelize;
 if (env === 'test') {
   sequelize = new Sequelize('sqlite::memory:', { logging: false });
 } else {

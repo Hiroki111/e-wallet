@@ -1,10 +1,9 @@
 import { Role } from 'db/models/role';
 import { User } from 'db/models/user';
-import { sequelize } from 'db/models/sequelize';
 
-const db: { [key: string]: any } = {
-  Role: Role(sequelize),
-  User: User(sequelize),
+const db = {
+  Role,
+  User,
 };
 
 Object.keys(db).forEach((modelName) => {
@@ -12,7 +11,5 @@ Object.keys(db).forEach((modelName) => {
     db[modelName].associate(db);
   }
 });
-
-db.sequelize = sequelize;
 
 export default db;
