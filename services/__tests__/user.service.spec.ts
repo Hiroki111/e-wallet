@@ -2,11 +2,9 @@ import { UserService } from 'services/user.service';
 import db from 'db';
 
 describe('UserService', () => {
-  const thisDb: any = db;
-
   beforeAll(async () => {
-    await thisDb.sequelize.sync({ force: true });
-    thisDb.User.create({
+    await db.sequelize.sync({ force: true });
+    db.User.create({
       username: 'John Doe',
       email: 'john@example.com',
       password: 'i-am-john',
@@ -14,7 +12,7 @@ describe('UserService', () => {
   });
 
   afterAll(async () => {
-    await thisDb.sequelize.close();
+    await db.sequelize.close();
   });
 
   it('should find a user by ID', async () => {

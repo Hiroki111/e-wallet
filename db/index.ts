@@ -2,9 +2,7 @@ import { Role } from 'db/models/role';
 import { User } from 'db/models/user';
 import { sequelize } from 'db/models/sequelize';
 
-const db: {
-  [key: string]: any;
-} = {
+const db: { [key: string]: any } = {
   Role: Role(sequelize),
   User: User(sequelize),
 };
