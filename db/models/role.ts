@@ -1,6 +1,5 @@
-import { Model, BuildOptions, DataTypes, Optional } from 'sequelize';
+import { Model, BuildOptions, DataTypes, Sequelize, Optional } from 'sequelize';
 
-import { sequelizeInstance } from 'db/models/sequelize';
 import { WithAssociate } from 'db/models/interfaces';
 
 export interface RoleAttributes {
@@ -17,23 +16,27 @@ type RoleWithAssociation = typeof Model &
     new (values?: Record<string, unknown>, options?: BuildOptions): RoleInstance;
   };
 
-const Role = sequelizeInstance.define<RoleInstance>(
-  'roles',
-  {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    name: { type: DataTypes.STRING },
-  },
-  {
-    paranoid: true,
-  }
-) as RoleWithAssociation;
+const Role = (sequelizeInstance: Sequelize): RoleWithAssociation => {
+  const Role = sequelizeInstance.define<RoleInstance>(
+    'roles',
+    {
+      id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+      name: { type: DataTypes.STRING },
+    },
+    {
+      paranoid: true,
+    }
+  ) as RoleWithAssociation;
 
-Role.associate = (models) => {
-  Role.belongsToMany(models.User, {
-    through: 'user_roles',
-    foreignKey: 'userId',
-    otherKey: 'roleId',
-  });
+  Role.associate = (models) => {
+    Role.belongsToMany(models.User, {
+      through: 'user_roles',
+      foreignKey: 'userId',
+      otherKey: 'roleId',
+    });
+  };
+
+  return Role;
 };
 
 export { Role };

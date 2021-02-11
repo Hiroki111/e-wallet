@@ -1,5 +1,6 @@
 import {
   Model,
+  Sequelize,
   BuildOptions,
   DataTypes,
   Optional,
@@ -7,7 +8,6 @@ import {
   BelongsToManyGetAssociationsMixin,
 } from 'sequelize';
 
-import { sequelizeInstance } from 'db/models/sequelize';
 import { RoleInstance } from 'db/models/role';
 import { WithAssociate } from 'db/models/interfaces';
 
@@ -30,30 +30,34 @@ type UserWithAssociation = typeof Model &
     new (values?: Record<string, unknown>, options?: BuildOptions): UserInstance;
   };
 
-const User = sequelizeInstance.define<UserInstance>(
-  'users',
-  {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    username: { type: DataTypes.STRING },
-    email: { type: DataTypes.STRING },
-    password: { type: DataTypes.STRING },
-  },
-  {
-    paranoid: true,
-    scopes: {
-      withoutPassword: {
-        attributes: { exclude: ['password'] },
-      },
+const User = (sequelizeInstance: Sequelize): UserWithAssociation => {
+  const User = sequelizeInstance.define<UserInstance>(
+    'users',
+    {
+      id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+      username: { type: DataTypes.STRING },
+      email: { type: DataTypes.STRING },
+      password: { type: DataTypes.STRING },
     },
-  }
-) as UserWithAssociation;
+    {
+      paranoid: true,
+      scopes: {
+        withoutPassword: {
+          attributes: { exclude: ['password'] },
+        },
+      },
+    }
+  ) as UserWithAssociation;
 
-User.associate = (models) => {
-  User.belongsToMany(models.Role, {
-    through: 'user_roles',
-    foreignKey: 'userId',
-    otherKey: 'roleId',
-  });
+  User.associate = (models) => {
+    User.belongsToMany(models.Role, {
+      through: 'user_roles',
+      foreignKey: 'userId',
+      otherKey: 'roleId',
+    });
+  };
+
+  return User;
 };
 
 export { User };
