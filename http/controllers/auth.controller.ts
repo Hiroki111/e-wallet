@@ -23,7 +23,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     await UserService.setRoles(user, roles);
     res.send({ message: 'User was registered successfully!' });
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    res.status(500).send({ message: `Registering failed: ${error.message}` });
   }
 };
 

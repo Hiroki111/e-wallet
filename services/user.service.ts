@@ -1,3 +1,4 @@
+import { UniqueConstraintError } from 'sequelize';
 import bcrypt from 'bcryptjs';
 
 import db from 'db';
@@ -27,8 +28,12 @@ export class UserService {
         password: bcrypt.hashSync(password, this._saltRounds),
       });
       return this.findById(user.id);
-    } catch (error) {
-      console.error(error);
+    } catch (e) {
+      if (e instanceof UniqueConstraintError) {
+        throw new Error(`The provided ${e.errors[0].path} is already used.`);
+      } else {
+        throw new Error(e);
+      }
     }
   }
 
