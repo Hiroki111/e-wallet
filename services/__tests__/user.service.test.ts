@@ -4,18 +4,19 @@ import { RoleService } from 'services/role.service';
 import db from 'db';
 
 describe('UserService', () => {
-  const exampleUser = {
-    username: 'John Doe',
-    email: 'john@example.com',
-    password: 'i-am-john',
-  };
-  const exampleRole = { name: 'User' };
-  let userRole = null;
+  let mockUser = null;
+  let mockRole = null;
+
   beforeAll(async () => {
     await sequelize.sync({ force: true, alter: true });
-    await db.User.create(exampleUser);
-    userRole = await db.Role.create(exampleRole);
-    userRole = db.Role.findByPk(userRole.id);
+    await db.User.create({
+      username: 'John Doe',
+      email: 'john@example.com',
+      password: 'i-am-john',
+    });
+    await db.Role.create({ name: 'User' });
+    mockUser = await db.User.findByPk(1);
+    mockRole = await db.Role.findByPk(1);
   });
 
   afterAll(async () => {
@@ -57,7 +58,7 @@ describe('UserService', () => {
   it('should NOT register a user with a duplicate name', async () => {
     try {
       await UserService.register({
-        username: exampleUser.username,
+        username: mockUser.username,
         email: 'john2@example.com',
         password: 'blahblah',
       });
@@ -70,7 +71,7 @@ describe('UserService', () => {
     try {
       await UserService.register({
         username: 'Carol Doe',
-        email: exampleUser.email,
+        email: mockUser.email,
         password: 'blahblah',
       });
     } catch (error) {
@@ -80,16 +81,7 @@ describe('UserService', () => {
 
   it('should set roles', async () => {
     const user = await UserService.findById(1);
-    const roleArray = await RoleService.findAllByNames([exampleRole.name]);
-    await UserService.setRoles(user, roleArray);
-    const setRoles = await user.getRoles();
-
-    expect(setRoles).toMatchObject(roleArray);
-  });
-
-  it('should set roles', async () => {
-    const user = await UserService.findById(1);
-    const providedRoles = await RoleService.findAllByNames([exampleRole.name]);
+    const providedRoles = await RoleService.findAllByNames([mockRole.name]);
     await UserService.setRoles(user, providedRoles);
     const usersRoles = await user.getRoles();
 
@@ -101,7 +93,7 @@ describe('UserService', () => {
     await UserService.setRoles(user, []);
     const usersRoles = await user.getRoles();
 
-    expect(usersRoles).toMatchObject([userRole]);
+    expect(usersRoles).toMatchObject([mockRole]);
   });
 
   it('should set the role of ID 1 if null is provided to setRoles', async () => {
@@ -109,6 +101,6 @@ describe('UserService', () => {
     await UserService.setRoles(user, null);
     const usersRoles = await user.getRoles();
 
-    expect(usersRoles).toMatchObject([userRole]);
+    expect(usersRoles).toMatchObject([mockRole]);
   });
 });
