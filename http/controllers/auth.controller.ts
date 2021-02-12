@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 
 import { UserService } from 'services/user.service';
 import { AuthService } from 'services/auth.service';
-import { RoleService } from 'services/role.service';
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -12,15 +11,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       password: req.body.password,
     });
 
-    if (!req.body.roles || req.body.roles.length < 1) {
-      await UserService.setRoles(user, [1]);
-      res.send({ message: 'User was registered successfully!' });
-      return;
-    }
-
-    const roles = await RoleService.findAllByNames(req.body.roles);
-
-    await UserService.setRoles(user, roles);
+    await UserService.setRoles(user, req.body.roles);
     res.send({ message: 'User was registered successfully!' });
   } catch (error) {
     res.status(500).send({ message: `Registering failed: ${error.message}` });

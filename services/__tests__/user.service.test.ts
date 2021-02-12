@@ -1,7 +1,6 @@
-import { UniqueConstraintError } from 'sequelize';
-
 import { sequelize } from 'db/sequelize';
 import { UserService } from 'services/user.service';
+import { RoleService } from 'services/role.service';
 import db from 'db';
 
 describe('UserService', () => {
@@ -10,9 +9,13 @@ describe('UserService', () => {
     email: 'john@example.com',
     password: 'i-am-john',
   };
+  const exampleRole = { name: 'User' };
+  let userRole = null;
   beforeAll(async () => {
     await sequelize.sync({ force: true, alter: true });
     await db.User.create(exampleUser);
+    userRole = await db.Role.create(exampleRole);
+    userRole = db.Role.findByPk(userRole.id);
   });
 
   afterAll(async () => {
@@ -73,5 +76,39 @@ describe('UserService', () => {
     } catch (error) {
       expect(error.message).toEqual('The provided email is already used.');
     }
+  });
+
+  it('should set roles', async () => {
+    const user = await UserService.findById(1);
+    const roleArray = await RoleService.findAllByNames([exampleRole.name]);
+    await UserService.setRoles(user, roleArray);
+    const setRoles = await user.getRoles();
+
+    expect(setRoles).toMatchObject(roleArray);
+  });
+
+  it('should set roles', async () => {
+    const user = await UserService.findById(1);
+    const providedRoles = await RoleService.findAllByNames([exampleRole.name]);
+    await UserService.setRoles(user, providedRoles);
+    const usersRoles = await user.getRoles();
+
+    expect(usersRoles).toMatchObject(providedRoles);
+  });
+
+  it('should set the role of ID 1 if an empty array is provided to setRoles', async () => {
+    const user = await UserService.findById(1);
+    await UserService.setRoles(user, []);
+    const usersRoles = await user.getRoles();
+
+    expect(usersRoles).toMatchObject([userRole]);
+  });
+
+  it('should set the role of ID 1 if null is provided to setRoles', async () => {
+    const user = await UserService.findById(1);
+    await UserService.setRoles(user, null);
+    const usersRoles = await user.getRoles();
+
+    expect(usersRoles).toMatchObject([userRole]);
   });
 });

@@ -37,7 +37,11 @@ export class UserService {
     }
   }
 
-  static async setRoles(user: UserInstance, roles: (RoleInstance | number)[]): Promise<void> {
+  static async setRoles(user: UserInstance, roles?: (RoleInstance | number)[]): Promise<void> {
+    if (!roles || roles.length < 1) {
+      roles = [1];
+    }
+
     await user.setRoles(roles);
   }
 
