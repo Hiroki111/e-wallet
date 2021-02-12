@@ -6,11 +6,7 @@ import * as controller from 'http/controllers/auth.controller';
 
 const ApiAuthRouter = express.Router();
 
-ApiAuthRouter.post(
-  '/register',
-  [verifyRegister.checkDuplicateUsernameOrEmail, verifyRegister.checkRolesExisted],
-  controller.register
-);
+ApiAuthRouter.post('/register', [verifyRegister.checkRolesExisted], controller.register);
 
 ApiAuthRouter.post('/login', controller.login);
 
