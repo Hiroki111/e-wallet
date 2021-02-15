@@ -55,4 +55,16 @@ describe('auth.controller', () => {
     expect(resC.statusCode).toEqual(500);
     expect(resD.statusCode).toEqual(200);
   });
+
+  it('should fail to register a user with a role that does not exist', async () => {
+    const res = await request(app)
+      .post('/api/auth/register')
+      .send({
+        username: 'Bob Doe',
+        email: 'bob@example.com',
+        password: 'i-am-bob',
+        roles: ['blah'],
+      });
+    expect(res.statusCode).toEqual(400);
+  });
 });
