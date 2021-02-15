@@ -9,7 +9,7 @@
     "server": "nodemon --exec babel-node ./server.ts --extensions \".ts\"",
     "client": "yarn --cwd client start",
     "dev": "concurrently \"yarn run server\" \"yarn run client\"",
-    "test": "cross-env NODE_ENV=test jest --runInBand"
+    "test": "cross-env NODE_ENV=test jest --maxWorkers=1"
   },
   "author": "",
   "license": "ISC",

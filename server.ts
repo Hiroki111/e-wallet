@@ -18,3 +18,5 @@ app.use('/', RootRouter);
 const port = 5000;
 
 app.listen(port, () => `Server running on port ${port}`);
+
+export { app };

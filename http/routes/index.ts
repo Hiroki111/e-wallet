@@ -5,7 +5,7 @@ import { ApiUserRouter } from 'http/routes/user.routes';
 
 const RootRouter = express.Router();
 
-RootRouter.use('/api/auth', ApiAuthRouter);
+RootRouter.use('/', ApiAuthRouter);
 RootRouter.use('/api/user', ApiUserRouter);
 
 export { RootRouter };
