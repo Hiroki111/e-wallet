@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import db from 'db';
 import { UserInstance, UserCreationAttributes } from 'db/models/user';
 import { RoleInstance } from 'db/models/role';
+import { RoleService } from 'services/role.service';
 
 export class UserService {
   private static readonly _saltRounds = 12;
@@ -47,6 +48,17 @@ export class UserService {
     }
 
     await user.setRoles(roles);
+  }
+
+  static async setRolesByRoleNames(user: UserInstance, roleNames?: string[]): Promise<void> {
+    if (!roleNames || roleNames.length < 1) {
+      await user.setRoles([1]);
+      return;
+    }
+
+    const roleInstances = await RoleService.findAllByNames(roleNames);
+
+    await user.setRoles(roleInstances);
   }
 
   static validatePassword(rawPassword: string, hashedPassword: string): boolean {

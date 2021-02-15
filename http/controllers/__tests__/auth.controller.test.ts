@@ -67,4 +67,17 @@ describe('auth.controller', () => {
       });
     expect(res.statusCode).toEqual(400);
   });
+
+  it('should register a user with an existing role name', async () => {
+    const res = await request(app)
+      .post('/api/auth/register')
+      .send({
+        username: 'Carole Doe',
+        email: 'carole@example.com',
+        password: 'i-am-carole',
+        roles: ['User'],
+      });
+    expect(res.body.message).toEqual('User was registered successfully!');
+    expect(res.statusCode).toEqual(200);
+  });
 });
