@@ -45,11 +45,6 @@ export class UserService {
     await user.setRoles(roles);
   }
 
-  static async getRoles(user: UserInstance): Promise<string[]> {
-    const roles = await user.getRoles();
-    return roles.map((role) => role.name);
-  }
-
   static validatePassword(rawPassword: string, hashedPassword: string): boolean {
     return bcrypt.compareSync(rawPassword, hashedPassword);
   }
