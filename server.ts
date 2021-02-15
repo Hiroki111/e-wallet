@@ -17,6 +17,8 @@ app.use('/', RootRouter);
 
 const port = 5000;
 
-app.listen(port, () => `Server running on port ${port}`);
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => `Server running on port ${port}`);
+}
 
 export { app };
