@@ -103,4 +103,22 @@ describe('UserService', () => {
 
     expect(usersRoles).toMatchObject([mockRole]);
   });
+
+  it('should hash a password', () => {
+    const rawPassword = 'raw-password';
+    const hashedPassword = UserService.hashPassword('raw-password');
+
+    expect(rawPassword).not.toEqual(hashedPassword);
+  });
+
+  it('should validate a password', async () => {
+    const user = await db.User.create({
+      username: 'Password Tester',
+      email: 'passwordtest@example.com',
+      password: UserService.hashPassword('raw-password'),
+    });
+    const isValid = await UserService.validatePassword('raw-password', user.password);
+
+    expect(isValid).toEqual(true);
+  });
 });

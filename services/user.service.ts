@@ -20,12 +20,16 @@ export class UserService {
     return await db.User.findOne({ where: { email } });
   }
 
+  static hashPassword(rawPassword: string): string {
+    return bcrypt.hashSync(rawPassword, this._saltRounds);
+  }
+
   static async register({ username, email, password }: UserCreationAttributes): Promise<UserInstance> {
     try {
       const user = await db.User.create({
         username,
         email,
-        password: bcrypt.hashSync(password, this._saltRounds),
+        password: this.hashPassword(password),
       });
       return this.findById(user.id);
     } catch (e) {
