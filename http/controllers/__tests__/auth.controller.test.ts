@@ -142,4 +142,21 @@ describe('auth.controller', () => {
 
     expect(res.statusCode).toEqual(401);
   });
+
+  it('should remove auth token when a user logs out', async () => {
+    const res = await request(app)
+      .post('/api/auth/logout')
+      .set('Cookie', [`token=${validAuthToken}`])
+      .send();
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.header['set-cookie'][0].includes('token=;')).toEqual(true);
+  });
+
+  it('should return 401 if a user tries to log out without a valid auth token', async () => {
+    const res = await request(app).post('/api/auth/logout').set('Cookie', ['token=invalidAuthToken']).send();
+
+    expect(res.statusCode).toEqual(401);
+    expect(res.header['set-cookie']).toEqual(undefined);
+  });
 });
