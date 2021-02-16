@@ -102,4 +102,13 @@ describe('auth.controller', () => {
     expect(res.statusCode).toEqual(200);
     expect(res.header['set-cookie']).toEqual([`token=${authToken}; Path=/; HttpOnly`]);
   });
+
+  it('should not login a user that has not been registered', async () => {
+    const email = 'eliot@example.com';
+    const password = 'i-am-eliot';
+    const res = await request(app).post('/api/auth/login').send({ email, password });
+
+    expect(res.statusCode).toEqual(404);
+    expect(res.header['set-cookie']).toEqual(undefined);
+  });
 });
