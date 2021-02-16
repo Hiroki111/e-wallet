@@ -4,11 +4,17 @@ import db from 'db';
 import { sequelize } from 'db/sequelize';
 import { app } from 'server';
 
-const authToken = 'mock-cookie';
+const validAuthToken = 'mock-cookie';
 
 jest.mock('services/auth.service', () => ({
   AuthService: {
-    generateJwtToken: jest.fn().mockReturnValue(authToken),
+    generateJwtToken: jest.fn().mockReturnValue(validAuthToken),
+    verifyToken: jest.fn().mockImplementation((providedToken) => {
+      if (providedToken !== validAuthToken) {
+        throw new Error('invalid');
+      }
+      return 1;
+    }),
   },
 }));
 
@@ -100,7 +106,7 @@ describe('auth.controller', () => {
     const res = await request(app).post('/api/auth/login').send({ email, password });
 
     expect(res.statusCode).toEqual(200);
-    expect(res.header['set-cookie']).toEqual([`token=${authToken}; Path=/; HttpOnly`]);
+    expect(res.header['set-cookie']).toEqual([`token=${validAuthToken}; Path=/; HttpOnly`]);
   });
 
   it('should not login a user that has not been registered', async () => {
@@ -110,5 +116,30 @@ describe('auth.controller', () => {
 
     expect(res.statusCode).toEqual(404);
     expect(res.header['set-cookie']).toEqual(undefined);
+  });
+
+  it('should not login a user with the wrong password', async () => {
+    const email = 'fred@example.com';
+    const password = 'i-am-fred';
+    await request(app).post('/api/auth/register').send({ username: 'Fred Doe', email, password });
+    const res = await request(app).post('/api/auth/login').send({ email, password: 'wrong-password' });
+
+    expect(res.statusCode).toEqual(401);
+    expect(res.header['set-cookie']).toEqual(undefined);
+  });
+
+  it('should check if a token was attached (200)', async () => {
+    const res = await request(app)
+      .get('/api/auth/checkToken')
+      .set('Cookie', [`token=${validAuthToken}`])
+      .send();
+
+    expect(res.statusCode).toEqual(200);
+  });
+
+  it('should check if a token was attached (401)', async () => {
+    const res = await request(app).get('/api/auth/checkToken').set('Cookie', ['token=invalidAuthToken']).send();
+
+    expect(res.statusCode).toEqual(401);
   });
 });
