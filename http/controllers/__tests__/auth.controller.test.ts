@@ -4,7 +4,19 @@ import db from 'db';
 import { sequelize } from 'db/sequelize';
 import { app } from 'server';
 
+const authToken = 'mock-cookie';
+
+jest.mock('services/auth.service', () => ({
+  AuthService: {
+    generateJwtToken: jest.fn().mockReturnValue(authToken),
+  },
+}));
+
 describe('auth.controller', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   beforeAll(async () => {
     await sequelize.sync({ force: true });
     await db.Role.create({ name: 'User' });
@@ -79,5 +91,15 @@ describe('auth.controller', () => {
       });
     expect(res.body.message).toEqual('User was registered successfully!');
     expect(res.statusCode).toEqual(200);
+  });
+
+  it('should login a user', async () => {
+    const email = 'dave@example.com';
+    const password = 'i-am-dave';
+    await request(app).post('/api/auth/register').send({ username: 'Dave Doe', email, password });
+    const res = await request(app).post('/api/auth/login').send({ email, password });
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.header['set-cookie']).toEqual([`token=${authToken}; Path=/; HttpOnly`]);
   });
 });
